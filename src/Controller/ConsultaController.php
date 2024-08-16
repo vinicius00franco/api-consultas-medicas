@@ -9,10 +9,39 @@ use Symfony\Component\Routing\Attribute\Route;
 class ConsultaController extends AbstractController
 {
     private $consultaRepository;
+    
 
     public function __construct(ConsultaRepository $consultaRepository)
     {
         $this->consultaRepository = $consultaRepository;
+    }
+
+    public function list(): JsonResponse
+    {
+        $consultas = $this->consultaRepository->findAll();
+        return $this->json($consultas);
+    }
+
+    public function create(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Implementar validação de dados aqui
+        if (new \DateTime($data['data']) > new \DateTime()) {
+            return new Response('Data inválida', Response::HTTP_BAD_REQUEST);
+        }
+
+        $consulta = new Consulta();
+        $consulta->setData(new \DateTime($data['data']));
+        $consulta->setStatus($data['status']);
+        $consulta->setBeneficiario($this->entityManager->getReference('App:Beneficiario', $data['beneficiario']));
+        $consulta->setMedico($this->entityManager->getReference('App:Medico', $data['medico']));
+        $consulta->setHospital($this->entityManager->getReference('App:Hospital', $data['hospital']));
+
+        $this->entityManager->persist($consulta);
+        $this->entityManager->flush();
+
+        return new Response('Consulta criada com sucesso!', Response::HTTP_CREATED);
     }
 
     public function update(Request $request, $id): Response
