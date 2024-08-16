@@ -21,6 +21,6 @@ class Medico
 
     #[ORM\ManyToOne(targetEntity: Hospital::class, inversedBy: 'medicos')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\CustomAssert(class: HospitalExists::class)]
+    #[Assert\CustomAssert(class: HospitalExists::class)] //hospital exists?
     private $hospital;
 }
