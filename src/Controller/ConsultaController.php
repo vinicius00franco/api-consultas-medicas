@@ -8,12 +8,53 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ConsultaController extends AbstractController
 {
-    #[Route('/consulta', name: 'app_consulta')]
-    public function index(): JsonResponse
+    private $consultaRepository;
+
+    public function __construct(ConsultaRepository $consultaRepository)
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/ConsultaController.php',
-        ]);
+        $this->consultaRepository = $consultaRepository;
+    }
+
+    public function update(Request $request, $id): Response
+    {
+        // Busca a consulta pelo ID
+        $consulta = $this->consultaRepository->find($id);
+
+        // Verifica se a consulta existe
+        if (!$consulta) {
+            throw new NotFoundHttpException('Consulta não encontrada.');
+        }
+
+        // Decodifica os dados do corpo da requisição
+        $data = json_decode($request->getContent(), true);
+
+        try {
+            // Tenta atualizar a consulta
+            $this->consultaRepository->updateConsulta($consulta, $data);
+            return new Response('Consulta atualizada com sucesso.', Response::HTTP_OK);
+        } catch (AccessDeniedHttpException $e) {
+            // Retorna uma resposta de erro se a consulta estiver concluída
+            return new Response($e->getMessage(), Response::HTTP_FORBIDDEN);
+        }
+    }
+
+    public function delete($id): Response
+    {
+        // Busca a consulta pelo ID
+        $consulta = $this->consultaRepository->find($id);
+
+        // Verifica se a consulta existe
+        if (!$consulta) {
+            throw new NotFoundHttpException('Consulta não encontrada.');
+        }
+
+        try {
+            // Tenta remover a consulta
+            $this->consultaRepository->removeConsulta($consulta);
+            return new Response('Consulta excluída com sucesso.', Response::HTTP_OK);
+        } catch (AccessDeniedHttpException $e) {
+            // Retorna uma resposta de erro se a consulta estiver concluída
+            return new Response($e->getMessage(), Response::HTTP_FORBIDDEN);
+        }
     }
 }

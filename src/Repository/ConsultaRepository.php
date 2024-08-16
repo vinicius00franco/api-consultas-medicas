@@ -16,28 +16,27 @@ class ConsultaRepository extends ServiceEntityRepository
         parent::__construct($registry, Consulta::class);
     }
 
-//    /**
-//     * @return Consulta[] Returns an array of Consulta objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function updateConsulta(Consulta $consulta, array $data)
+    {
+        if ($consulta->getStatus() === 'concluída') {
+            throw new AccessDeniedHttpException('Consultas concluídas não podem ser alteradas.');
+        }
 
-//    public function findOneBySomeField($value): ?Consulta
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        // Atualize os dados da consulta aqui
+        // Por exemplo:
+        // $consulta->setCampo($data['campo']);
+        
+        $this->getEntityManager()->persist($consulta);
+        $this->getEntityManager()->flush();
+    }
+
+    public function removeConsulta(Consulta $consulta)
+    {
+        if ($consulta->getStatus() === 'concluída') {
+            throw new AccessDeniedHttpException('Consultas concluídas não podem ser excluídas.');
+        }
+
+        $this->getEntityManager()->remove($consulta);
+        $this->getEntityManager()->flush();
+    }
 }
