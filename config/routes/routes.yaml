@@ -1,9 +1,7 @@
 
 consultas:
-    resource: 
-        type: annotation
-        path: /consultas
-        # Define prefixo para todas as rotas
+    resource: 'consulta/routes.php'
+
 
 # Definição de rotas individuais com prefixo aplicado
 list:
