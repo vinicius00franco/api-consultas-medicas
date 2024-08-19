@@ -2,21 +2,28 @@
 
 namespace App\Controller;
 
-
+use App\Entity\Consulta;
 use App\Repository\ConsultaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 
 class ConsultaController extends AbstractController
 {
     private $consultaRepository;
+    private $entityManager;
     
 
-    public function __construct(ConsultaRepository $consultaRepository)
+    public function __construct(ConsultaRepository $consultaRepository,EntityManagerInterface $entityManager)
     {
         $this->consultaRepository = $consultaRepository;
+        $this->entityManager = $entityManager;
     }
 
     public function list(): JsonResponse
@@ -35,7 +42,7 @@ class ConsultaController extends AbstractController
         }
 
         $consulta = new Consulta();
-        $consulta->setData(new \DateTime($data['data']));
+        $consulta->setDataNascimento(new \DateTime($data['data']));
         $consulta->setStatus($data['status']);
         $consulta->setBeneficiario($this->entityManager->getReference('App:Beneficiario', $data['beneficiario']));
         $consulta->setMedico($this->entityManager->getReference('App:Medico', $data['medico']));
