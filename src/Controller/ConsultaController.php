@@ -31,7 +31,6 @@ class ConsultaController extends AbstractController
         $consultas = $this->consultaRepository->findAll();
         return $this->json($consultas);
     }
-
     public function create(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);

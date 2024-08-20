@@ -1,56 +1,69 @@
 <?php
 
+
 namespace App\Repository;
 
 use App\Entity\Consulta;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-/**
- * @extends ServiceEntityRepository<Consulta>
- */
-class ConsultaRepository extends ServiceEntityRepository
+class ConsultaRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        parent::__construct($registry, Consulta::class);
+        $this->entityManager = $entityManager;
+    }
+
+    public function findAll()
+    {
+        return $this->entityManager->getRepository(Consulta::class)->findAll();
+    }
+    public function find($id)
+    {
+        return $this->entityManager->getRepository(Consulta::class)->find($id);
+    }
+
+    public function create(array $data)
+    {
+        $consulta = new Consulta();
+        $consulta->setDataNascimento(new \DateTime($data['data']));
+        $consulta->setStatus($data['status']);
+        $consulta->setBeneficiario($this->entityManager->getReference('App:Beneficiario', $data['beneficiario']));
+        $consulta->setMedico($this->entityManager->getReference('App:Medico', $data['medico']));
+        $consulta->setHospital($this->entityManager->getReference('App:Hospital', $data['hospital']));
+
+        $this->entityManager->persist($consulta);
+        $this->entityManager->flush();
+
+        return $consulta;
     }
 
     public function updateConsulta(Consulta $consulta, array $data)
     {
         if ($consulta->getStatus() === 'concluída') {
-            throw new AccessDeniedHttpException('Consultas concluídas não podem ser alteradas.');
+            throw new AccessDeniedHttpException('Não é possível alterar uma consulta concluída.');
         }
 
-        // Atualize os dados da consulta aqui
-        if (isset($data['data'])) {
-            $consulta->setData(new \DateTime($data['data']));
-        }
-        if (isset($data['status'])) {
-            $consulta->setStatus($data['status']);
-        }
-        if (isset($data['beneficiario'])) {
-            $consulta->setBeneficiario($this->getEntityManager()->getReference('App:Beneficiario', $data['beneficiario']));
-        }
-        if (isset($data['medico'])) {
-            $consulta->setMedico($this->getEntityManager()->getReference('App:Medico', $data['medico']));
-        }
-        if (isset($data['hospital'])) {
-            $consulta->setHospital($this->getEntityManager()->getReference('App:Hospital', $data['hospital']));
-        }
+        $consulta->setDataNascimento(new \DateTime($data['data']));
+        $consulta->setStatus($data['status']);
+        $consulta->setBeneficiario($this->entityManager->getReference('App:Beneficiario', $data['beneficiario']));
+        $consulta->setMedico($this->entityManager->getReference('App:Medico', $data['medico']));
+        $consulta->setHospital($this->entityManager->getReference('App:Hospital', $data['hospital']));
 
-        $this->getEntityManager()->persist($consulta);
-        $this->getEntityManager()->flush();
+        $this->entityManager->flush();
+
+        return $consulta;
     }
 
     public function removeConsulta(Consulta $consulta)
     {
         if ($consulta->getStatus() === 'concluída') {
-            throw new AccessDeniedHttpException('Consultas concluídas não podem ser excluídas.');
+            throw new AccessDeniedHttpException('Não é possível excluir uma consulta concluída.');
         }
 
-        $this->getEntityManager()->remove($consulta);
-        $this->getEntityManager()->flush();
+        $this->entityManager->remove($consulta);
+        $this->entityManager->flush();
     }
 }

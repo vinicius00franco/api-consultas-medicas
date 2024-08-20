@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BeneficiarioRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Validator\Atributtes\Age;
+use App\Validator\Constraints\Age;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -30,6 +30,13 @@ class Beneficiario
     public function setNome(string $nome): void {
         $this->nome = $nome;
     }
+
+    public function updateFromData(array $data): void
+{
+    $this->setNome($data['nome']);
+    $this->setEmail($data['email']);
+    $this->setDataNascimento(new \DateTime($data['data_nascimento']));
+}
 
     public function getDataNascimento(): ?\DateTimeInterface
     {

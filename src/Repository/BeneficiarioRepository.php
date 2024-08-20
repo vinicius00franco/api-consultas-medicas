@@ -3,41 +3,46 @@
 namespace App\Repository;
 
 use App\Entity\Beneficiario;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * @extends ServiceEntityRepository<Beneficiario>
- */
-class BeneficiarioRepository extends ServiceEntityRepository
+class BeneficiarioRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        parent::__construct($registry, Beneficiario::class);
+        $this->entityManager = $entityManager;
     }
 
-//    /**
-//     * @return Beneficiario[] Returns an array of Beneficiario objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findAll()
+    {
+        return $this->entityManager->getRepository(Beneficiario::class)->findAll();
+    }
 
-//    public function findOneBySomeField($value): ?Beneficiario
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function create(array $data)
+    {
+        $beneficiario = new Beneficiario();
+        $beneficiario->setNome($data['nome']);
+        $beneficiario->setEmail($data['email']);
+        $beneficiario->setDataNascimento(new \DateTime($data['data_nascimento']));
+
+        $this->entityManager->persist($beneficiario);
+        $this->entityManager->flush();
+
+        return $beneficiario;
+    }
+
+    public function update(Beneficiario $beneficiario, array $data)
+    {
+        $beneficiario->updateFromData($data);
+        $this->entityManager->flush();
+
+        return $beneficiario;
+    }
+
+    public function delete(Beneficiario $beneficiario)
+    {
+        $this->entityManager->remove($beneficiario);
+        $this->entityManager->flush();
+    }
 }
