@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\phpunit.xml.dist" tests="3" assertions="2" errors="2" failures="1" skipped="0" time="0.192439">
+    <testsuite name="Project Test Suite" tests="3" assertions="2" errors="2" failures="1" skipped="0" time="0.192439">
+      <testsuite name="App\Tests\Integration\DatabaseConnectionTest" file="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\DatabaseConnectionTest.php" tests="1" assertions="2" errors="0" failures="1" skipped="0" time="0.113311">
+        <testcase name="testEntityManagerConnection" file="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\DatabaseConnectionTest.php" line="19" class="App\Tests\Integration\DatabaseConnectionTest" classname="App.Tests.Integration.DatabaseConnectionTest" assertions="2" time="0.113311">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">App\Tests\Integration\DatabaseConnectionTest::testEntityManagerConnection&#13;
+Entity Manager connection should be established.
+Failed asserting that false is true.
+&#13;
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\DatabaseConnectionTest.php:24
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\phpunit\phpunit\phpunit:104</failure>
+        </testcase>
+      </testsuite>
+      <testsuite name="App\Tests\ConsultaStatusTest" file="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\entityValidation\BusinessLogicValidating\ConsultaStatusTest.php" tests="2" assertions="0" errors="2" failures="0" skipped="0" time="0.079128">
+        <testcase name="testConsultaStatusCannotBeChangedAfterCompletion" file="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\entityValidation\BusinessLogicValidating\ConsultaStatusTest.php" line="22" class="App\Tests\ConsultaStatusTest" classname="App.Tests.ConsultaStatusTest" assertions="0" time="0.051285">
+          <error type="Doctrine\DBAL\Exception\TableNotFoundException">App\Tests\ConsultaStatusTest::testConsultaStatusCannotBeChangedAfterCompletion&#13;
+Doctrine\DBAL\Exception\TableNotFoundException: An exception occurred while executing a query: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'consulta_medica_test.consulta' doesn't exist
+&#13;
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Driver\API\MySQL\ExceptionConverter.php:40
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:1366
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:1308
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Statement.php:108
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Statement.php:133
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\orm\src\Persisters\Entity\BasicEntityPersister.php:249
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\orm\src\UnitOfWork.php:1048
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\orm\src\UnitOfWork.php:399
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\orm\src\EntityManager.php:259
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\entityValidation\BusinessLogicValidating\ConsultaStatusTest.php:27
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\phpunit\phpunit\phpunit:104</error>
+        </testcase>
+        <testcase name="testConsultaCannotBeDeletedAfterCompletion" file="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\entityValidation\BusinessLogicValidating\ConsultaStatusTest.php" line="34" class="App\Tests\ConsultaStatusTest" classname="App.Tests.ConsultaStatusTest" assertions="0" time="0.027843">
+          <error type="Doctrine\DBAL\Exception\TableNotFoundException">App\Tests\ConsultaStatusTest::testConsultaCannotBeDeletedAfterCompletion&#13;
+Doctrine\DBAL\Exception\TableNotFoundException: An exception occurred while executing a query: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'consulta_medica_test.consulta' doesn't exist
+&#13;
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Driver\API\MySQL\ExceptionConverter.php:40
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:1366
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:1308
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Statement.php:108
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Statement.php:133
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\orm\src\Persisters\Entity\BasicEntityPersister.php:249
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\orm\src\UnitOfWork.php:1048
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\orm\src\UnitOfWork.php:399
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\orm\src\EntityManager.php:259
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\entityValidation\BusinessLogicValidating\ConsultaStatusTest.php:39
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\phpunit\phpunit\phpunit:104</error>
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>
