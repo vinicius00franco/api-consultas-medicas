@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
-<phpunit 
+<phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     backupGlobals="false"
@@ -9,8 +9,18 @@
     bootstrap="tests/bootstrap.php"
 >
     <php>
+        <env name="APP_ENV" value="test"/>
+        <env name="DB_HOST" value="127.0.0.1"/>
+        <env name="DB_PORT" value="3306"/>
+        <env name="DB_NAME" value="consulta_medica_test"/>
+        <env name="DB_USER" value="root"/>
+        <env name="DB_PASSWORD" value="mM/C$2qCewTey-!"/>
+
+        
+
         <ini name="display_errors" value="1" />
         <ini name="error_reporting" value="-1" />
+        <env name="APP_ENV" value="test" />
         <server name="APP_ENV" value="test" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
         <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
@@ -28,7 +38,7 @@
     </coverage>
 
     <logging>
-        <junit outputFile="logs/junit.xml"/>
-        <testdoxText outputFile="logs/testdox.txt"/>
+        <junit outputFile="logs/junit.xml" />
+        <testdoxText outputFile="logs/testdox.txt" />
     </logging>
 </phpunit>

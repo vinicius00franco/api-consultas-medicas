@@ -1,7 +1,7 @@
 doctrine:
     dbal:
         driver: 'pdo_mysql'
-        server_version: '8.0'
+        server_version: '8.0.37'
         charset: utf8mb4
         host: '%env(DB_HOST)%'
         port: '%env(DB_PORT)%'

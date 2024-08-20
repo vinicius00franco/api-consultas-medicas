@@ -1,7 +1,3 @@
-Consulta Status (App\Tests\ConsultaStatus)
- [ ] Consulta status cannot be changed after completion
- [ ] Consulta cannot be deleted after completion
-
 Database Connection (App\Tests\Integration\DatabaseConnection)
  [ ] Entity manager connection
 
