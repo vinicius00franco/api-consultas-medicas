@@ -31,7 +31,7 @@ class Beneficiario
         $this->nome = $nome;
     }
 
-    public function updateFromData(array $data): void
+    public function setFromData(array $data): void
 {
     $this->setNome($data['nome']);
     $this->setEmail($data['email']);
@@ -47,5 +47,9 @@ class Beneficiario
     {
         $this->dataNascimento = $dataNascimento;
         return $this;
+    }
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
     }
 }

@@ -22,9 +22,7 @@ class BeneficiarioRepository
     public function create(array $data)
     {
         $beneficiario = new Beneficiario();
-        $beneficiario->setNome($data['nome']);
-        $beneficiario->setEmail($data['email']);
-        $beneficiario->setDataNascimento(new \DateTime($data['data_nascimento']));
+        $beneficiario->setFromData($data);
 
         $this->entityManager->persist($beneficiario);
         $this->entityManager->flush();
@@ -34,7 +32,8 @@ class BeneficiarioRepository
 
     public function update(Beneficiario $beneficiario, array $data)
     {
-        $beneficiario->updateFromData($data);
+        $beneficiario->setFromData($data);
+
         $this->entityManager->flush();
 
         return $beneficiario;
