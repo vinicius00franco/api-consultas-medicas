@@ -1,17 +1,14 @@
 <?php
 
-
-// tests/Integration/DatabaseConnectionTest.php
 namespace App\Tests\Integration;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class DatabaseConnectionTest extends TestCase
+class DatabaseConnectionTest extends KernelTestCase
 {
-    
     /**
      * @var EntityManagerInterface|MockObject
      */
@@ -24,36 +21,73 @@ class DatabaseConnectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = $this->createMock(Connection::class);
-        $this->entityManager = $this->createMock(EntityManagerInterface::class);
+        // Boot the Symfony kernel
+        self::bootKernel();
 
-        // Simulando o retorno do método getConnection do EntityManager
-        $this->entityManager->method('getConnection')->willReturn($this->connection);
+        // Create a mock for EntityManagerInterface
+        $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
-        // Simulando uma conexão bem-sucedida
-        $this->connection->method('isConnected')->willReturn(true);
+        // Create a mock for Connection
+        $this->connectionMock = $this->createMock(Connection::class);
+
+        // Configure the EntityManager mock to return the Connection mock
+        $this->entityManagerMock
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
     }
 
-    public function testEntityManagerConnection(): void
+    /**
+     * @dataProvider connectionStatusProvider
+     */
+    public function testEntityManagerConnectionIsEstablished(bool $isConnected): void
     {
-        $this->assertInstanceOf(EntityManagerInterface::class, $this->entityManager, 'Entity Manager should be an instance of EntityManagerInterface.');
+        // Configure the Connection mock to simulate the connection status
+        $this->connectionMock
+            ->method('isConnected')
+            ->willReturn($isConnected);
 
-        $connection = $this->entityManager->getConnection();
-        $this->assertNotNull($connection, 'Connection should not be null.');
-
-        // Verificando se a conexão foi estabelecida
-        $this->assertTrue($connection->isConnected(), 'Entity Manager connection should be established.');
-
-        // Simulando a execução de uma consulta simples
-        $this->connection->expects($this->once())->method('executeQuery')->with('SELECT 1')->willReturn(new class {
-            public function fetchOne() {
-                return 1;
-            }
-        });
-
-        // Verificando o resultado da consulta simulada
-        $result = $connection->executeQuery('SELECT 1');
-        $this->assertEquals(1, $result->fetchOne(), 'Entity Manager query should return 1.');
+        // Test the connection status
+        $this->assertSame($isConnected, $this->entityManagerMock->getConnection()->isConnected());
     }
 
+    public function connectionStatusProvider(): array
+    {
+        return [
+            'Connection is established' => [true],
+            'Connection is not established' => [false],
+        ];
+    }
+
+    /**
+     * @dataProvider executeQueryProvider
+     */
+    public function testEntityManagerCanExecuteQuery(string $query, $expectedResult): void
+    {
+        // Configure the Connection mock to simulate query execution
+        $this->connectionMock
+            ->method('executeQuery')
+            ->willReturn($this->createConfiguredMock(\Doctrine\DBAL\Result::class, ['fetchOne' => $expectedResult]));
+
+        // Execute the query and assert the result
+        $result = $this->entityManagerMock->getConnection()->executeQuery($query);
+        $this->assertEquals($expectedResult, $result->fetchOne());
+    }
+
+    public function executeQueryProvider(): array
+    {
+        return [
+            'Select 1' => ['SELECT 1', 1],
+            'Select 0' => ['SELECT 0', 0],
+            'Select null' => ['SELECT NULL', null],
+        ];
+    }
+
+    protected function tearDown(): void
+    {
+        // Unset mocks
+        $this->entityManagerMock = null;
+        $this->connectionMock = null;
+
+        parent::tearDown();
+    }
 }
