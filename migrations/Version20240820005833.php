@@ -19,11 +19,7 @@ final class Version20240820005833 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE beneficiario (id INT AUTO_INCREMENT NOT NULL, nome VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, data_nascimento DATE NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
-        $this->addSql('CREATE TABLE consulta (id INT AUTO_INCREMENT NOT NULL, data DATETIME NOT NULL, status VARCHAR(50) NOT NULL, beneficiario_id INT NOT NULL, medico_id INT NOT NULL, hospital_id INT NOT NULL, INDEX IDX_A6FE3FDE4B64ABC7 (beneficiario_id), INDEX IDX_A6FE3FDEA7FB1C0C (medico_id), INDEX IDX_A6FE3FDE63DBB69 (hospital_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
-        $this->addSql('CREATE TABLE hospital (id INT AUTO_INCREMENT NOT NULL, nome VARCHAR(255) NOT NULL, endereco VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
-        $this->addSql('CREATE TABLE medico (id INT AUTO_INCREMENT NOT NULL, nome VARCHAR(255) NOT NULL, especialidade VARCHAR(255) NOT NULL, hospital_id INT NOT NULL, INDEX IDX_34E5914C63DBB69 (hospital_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
+
         if (!$schema->hasTable('beneficiario')) {
             $this->addSql('CREATE TABLE beneficiario (id INT AUTO_INCREMENT NOT NULL, nome VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, data_nascimento DATE NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
         }
@@ -39,6 +35,12 @@ final class Version20240820005833 extends AbstractMigration
         if (!$schema->hasTable('consulta')) {
             $this->addSql('CREATE TABLE consulta (id INT AUTO_INCREMENT NOT NULL, data DATETIME NOT NULL, status VARCHAR(50) NOT NULL, beneficiario_id INT NOT NULL, medico_id INT NOT NULL, hospital_id INT NOT NULL, INDEX IDX_A6FE3FDE4B64ABC7 (beneficiario_id), INDEX IDX_A6FE3FDEA7FB1C0C (medico_id), INDEX IDX_A6FE3FDE63DBB69 (hospital_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
         }
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('CREATE TABLE beneficiario (id INT AUTO_INCREMENT NOT NULL, nome VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, data_nascimento DATE NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('CREATE TABLE consulta (id INT AUTO_INCREMENT NOT NULL, data DATETIME NOT NULL, status VARCHAR(50) NOT NULL, beneficiario_id INT NOT NULL, medico_id INT NOT NULL, hospital_id INT NOT NULL, INDEX IDX_A6FE3FDE4B64ABC7 (beneficiario_id), INDEX IDX_A6FE3FDEA7FB1C0C (medico_id), INDEX IDX_A6FE3FDE63DBB69 (hospital_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('CREATE TABLE hospital (id INT AUTO_INCREMENT NOT NULL, nome VARCHAR(255) NOT NULL, endereco VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('CREATE TABLE medico (id INT AUTO_INCREMENT NOT NULL, nome VARCHAR(255) NOT NULL, especialidade VARCHAR(255) NOT NULL, hospital_id INT NOT NULL, INDEX IDX_34E5914C63DBB69 (hospital_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4');
+        
         
         $this->addSql('ALTER TABLE consulta ADD CONSTRAINT FK_A6FE3FDE4B64ABC7 FOREIGN KEY (beneficiario_id) REFERENCES beneficiario (id)');
         $this->addSql('ALTER TABLE consulta ADD CONSTRAINT FK_A6FE3FDEA7FB1C0C FOREIGN KEY (medico_id) REFERENCES medico (id)');
