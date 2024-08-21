@@ -1,9 +1,8 @@
 framework:
     validation:
-        # Enables validator auto-mapping support.
-        # For instance, basic validation constraints will be inferred from Doctrine's metadata.
-        #auto_mapping:
-        #    App\Entity\: []
+        enabled: true
+        # Se você estiver usando atributos, certifique-se de que o validador está configurado para suportá-los
+        enable_attributes: true  # Em versões mais recentes, o suporte para atributos é padrão
 
 when@test:
     framework:

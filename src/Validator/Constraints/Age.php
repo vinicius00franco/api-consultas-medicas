@@ -4,15 +4,19 @@ namespace App\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 
-/**
- * @Annotation
- */
+#[\Attribute]
 class Age extends Constraint
 {
-    public $message = 'O beneficiário deve ter pelo menos 18 anos.';
+    public string $message = 'O beneficiário deve ter pelo menos 18 anos.';
+
+    public function __construct(string $message = null, array $groups = null, mixed $payload = null)
+    {
+        parent::__construct($groups, $payload);
+        $this->message = $message ?? $this->message;
+    }
 
     public function validatedBy(): string
     {
-        return static::class.'Validator';
+        return \App\Validator\AgeValidator::class;
     }
 }
