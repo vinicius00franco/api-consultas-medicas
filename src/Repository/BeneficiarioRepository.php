@@ -1,22 +1,15 @@
 <?php
-
 namespace App\Repository;
 
 use App\Entity\Beneficiario;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class BeneficiarioRepository
+class BeneficiarioRepository extends ServiceEntityRepository
 {
-    private $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->entityManager = $entityManager;
-    }
-
-    public function findAll():array
-    {
-        return $this->entityManager->getRepository(Beneficiario::class)->findAll();
+        parent::__construct($registry, Beneficiario::class);
     }
 
     public function create(array $data): Beneficiario
@@ -24,24 +17,22 @@ class BeneficiarioRepository
         $beneficiario = new Beneficiario();
         $beneficiario->setFromData($data);
 
-        $this->entityManager->persist($beneficiario);
-        $this->entityManager->flush();
+        $this->_em->persist($beneficiario); // Utilize $this->_em para acessar o EntityManager
+        $this->_em->flush();
 
         return $beneficiario;
     }
 
-    public function update(Beneficiario $beneficiario, array $data) : Beneficiario
+    public function update(Beneficiario $beneficiario, array $data): Beneficiario
     {
         $beneficiario->setFromData($data);
-
-        $this->entityManager->flush();
-
+        $this->_em->flush();
         return $beneficiario;
     }
 
-    public function delete(Beneficiario $beneficiario) : void
+    public function delete(Beneficiario $beneficiario): void
     {
-        $this->entityManager->remove($beneficiario);
-        $this->entityManager->flush();
+        $this->_em->remove($beneficiario);
+        $this->_em->flush();
     }
 }

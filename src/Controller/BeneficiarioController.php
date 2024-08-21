@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Beneficiario;
@@ -7,14 +6,17 @@ use App\Repository\BeneficiarioRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class BeneficiarioController
 {
     private $beneficiarioRepository;
+    private $serializer;
 
-    public function __construct(BeneficiarioRepository $beneficiarioRepository)
+    public function __construct(BeneficiarioRepository $beneficiarioRepository,SerializerInterface $serializer )
     {
         $this->beneficiarioRepository = $beneficiarioRepository;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -23,11 +25,12 @@ class BeneficiarioController
     public function list(): Response
     {
         $beneficiarios = $this->beneficiarioRepository->findAll();
+        
         return new Response(json_encode($beneficiarios), 200, ['Content-Type' => 'application/json']);
     }
 
     /**
-     * @Route("/beneficiarios", methods={"POST"})
+     * @Route("/beneficiarios/create", methods={"POST"})
      */
     public function create(Request $request): Response
     {

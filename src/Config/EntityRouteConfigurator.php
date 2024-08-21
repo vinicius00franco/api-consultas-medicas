@@ -20,7 +20,7 @@ class EntityRouteConfigurator implements RouteConfiguratorInterface
 
     public function configureRoutes(RouteCollection $routes): void
     {
-        $routes->add($this->prefix . '_create', new Route($this->prefix, [
+        $routes->add($this->prefix . '_create', new Route($this->prefix . '/create', [
             '_controller' => $this->controller . '::create',
             'methods' => ['POST'],
         ]));
