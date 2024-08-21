@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class BeneficiarioController extends AbstractController
@@ -17,10 +16,9 @@ class BeneficiarioController extends AbstractController
     private $beneficiarioService;
     private $serializer;
 
-    public function __construct(BeneficiarioService $beneficiarioService, SerializerInterface $serializer)
+    public function __construct(BeneficiarioService $beneficiarioService)
     {
         $this->beneficiarioService = $beneficiarioService;
-        $this->serializer = $serializer;
     }
 
     /**

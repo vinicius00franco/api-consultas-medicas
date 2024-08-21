@@ -18,7 +18,7 @@ class AgeValidator extends ConstraintValidator
 
         if ($age < 18) {
             $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ value }}', $value)
+                ->setParameter('{{ value }}', $value->format('d/m/Y'))
                 ->addViolation();
         }
     }
