@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Beneficiario;
@@ -7,13 +8,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class BeneficiarioController
 {
     private $beneficiarioRepository;
     private $serializer;
 
-    public function __construct(BeneficiarioRepository $beneficiarioRepository,SerializerInterface $serializer )
+    public function __construct(BeneficiarioRepository $beneficiarioRepository, SerializerInterface $serializer)
     {
         $this->beneficiarioRepository = $beneficiarioRepository;
         $this->serializer = $serializer;
@@ -25,8 +27,12 @@ class BeneficiarioController
     public function list(): Response
     {
         $beneficiarios = $this->beneficiarioRepository->findAll();
-        
-        return new Response(json_encode($beneficiarios), 200, ['Content-Type' => 'application/json']);
+
+        $jsonBeneficiarios = $this->serializer->serialize($beneficiarios, 'json', [
+            AbstractNormalizer::GROUPS => ['beneficiario']
+        ]);
+
+        return new Response($jsonBeneficiarios, 200, ['Content-Type' => 'application/json']);
     }
 
     /**
@@ -41,7 +47,12 @@ class BeneficiarioController
         }
 
         $beneficiario = $this->beneficiarioRepository->create($data);
-        return new Response(json_encode($beneficiario), 201, ['Content-Type' => 'application/json']);
+
+        $jsonBeneficiario = $this->serializer->serialize($beneficiario, 'json', [
+            AbstractNormalizer::GROUPS => ['beneficiario']
+        ]);
+
+        return new Response(json_encode($jsonBeneficiario), 201, ['Content-Type' => 'application/json']);
     }
 
     /**
@@ -56,7 +67,12 @@ class BeneficiarioController
         }
 
         $beneficiario = $this->beneficiarioRepository->update($beneficiario, $data);
-        return new Response(json_encode($beneficiario), 200, ['Content-Type' => 'application/json']);
+
+        $jsonBeneficiario = $this->serializer->serialize($beneficiario, 'json', [
+            AbstractNormalizer::GROUPS => ['beneficiario']
+        ]);
+
+        return new Response(json_encode($jsonBeneficiario), 200, ['Content-Type' => 'application/json']);
     }
 
     /**

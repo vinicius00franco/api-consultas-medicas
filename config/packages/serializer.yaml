@@ -1,0 +1,5 @@
+# config/packages/serializer.yaml
+framework:
+    serializer:
+        enabled: true
+        # Aqui você pode adicionar configurações adicionais se necessário

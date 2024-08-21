@@ -27,5 +27,13 @@ services:
     public: true
     tags: ["controller.service_arguments"]
 
-  # Add more service definitions when explicit configuration is needed
-  # Please note that last definitions always *replace* previous ones
+  # Configuração padrão para o serializer
+  Symfony\Component\Serializer\Serializer:
+    public: true
+
+  # Certifique-se de que os encoders e normalizers padrão são usados
+  Symfony\Component\Serializer\Normalizer\ObjectNormalizer:
+    public: false
+
+  Symfony\Component\Serializer\Encoder\JsonEncoder:
+    public: false

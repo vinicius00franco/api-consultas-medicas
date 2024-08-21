@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\BeneficiarioRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Validator\Constraints\Age;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,29 +15,39 @@ class Beneficiario
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['beneficiario'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['beneficiario'])]
     private $nome;
 
     #[ORM\Column(type: 'string')]
-    
+    #[Groups(['beneficiario'])]
     private $email;
 
     #[ORM\Column(type: 'date')]
     #[Age(message: "O beneficiário deve ter pelo menos 18 anos.")]
+    #[Groups(['beneficiario'])]
     private $dataNascimento;
 
-    public function setNome(string $nome): void {
+    public function setNome(string $nome): void
+    {
         $this->nome = $nome;
     }
 
     public function setFromData(array $data): void
-{
-    $this->setNome($data['nome']);
-    $this->setEmail($data['email']);
-    $this->setDataNascimento(new \DateTime($data['data_nascimento']));
-}
+    {
+        if (isset($data['nome'])) {
+            $this->setNome($data['nome']);
+        }
+        if (isset($data['email'])) {
+            $this->setEmail($data['email']);
+        }
+        if (isset($data['data_nascimento'])) {
+            $this->setDataNascimento(new \DateTime($data['data_nascimento']));
+        }
+    }
 
     public function getDataNascimento(): ?\DateTimeInterface
     {
@@ -51,5 +62,10 @@ class Beneficiario
     public function setEmail(string $email): void
     {
         $this->email = $email;
+    }
+
+    public function __toString(): string
+    {
+        return $this->dataNascimento ? $this->dataNascimento->format('Y-m-d') : '';
     }
 }
