@@ -84,7 +84,7 @@ class BeneficiarioController extends AbstractController
     }
 
     /**
-     * @Route("/beneficiarios/{id}", methods={"DELETE"})
+     * @Route("/beneficiarios/delete/{id}", methods={"DELETE"})
      */
     public function delete(Beneficiario $beneficiario): Response
     {

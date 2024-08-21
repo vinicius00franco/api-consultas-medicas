@@ -75,8 +75,8 @@ class Beneficiario
         if (isset($data['email'])) {
             $this->setEmail($data['email']);
         }
-        if (isset($data['data_nascimento'])) {
-            $this->setDataNascimento(new \DateTime($data['data_nascimento']));
+        if (isset($data['dataNascimento'])) {
+            $this->dataNascimento = new \DateTime($data['dataNascimento']);
         }
     }
 

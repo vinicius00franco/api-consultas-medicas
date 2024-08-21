@@ -36,7 +36,7 @@ class EntityRouteConfigurator implements RouteConfiguratorInterface
             'requirements' => ['id' => '\d+'],
         ]));
 
-        $routes->add($this->prefix . '_delete', new Route($this->prefix . '/{id}', [
+        $routes->add($this->prefix . '_delete', new Route($this->prefix . '/delete/{id}', [
             '_controller' => $this->controller . '::delete',
             'methods' => ['DELETE'],
             'requirements' => ['id' => '\d+'],
