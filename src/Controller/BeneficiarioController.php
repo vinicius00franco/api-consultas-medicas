@@ -3,36 +3,38 @@
 namespace App\Controller;
 
 use App\Entity\Beneficiario;
-use App\Repository\BeneficiarioRepository;
+use App\Service\BeneficiarioService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-class BeneficiarioController
+class BeneficiarioController extends AbstractController
 {
-    private $beneficiarioRepository;
+    private $beneficiarioService;
     private $serializer;
 
-    public function __construct(BeneficiarioRepository $beneficiarioRepository, SerializerInterface $serializer)
+    public function __construct(BeneficiarioService $beneficiarioService, SerializerInterface $serializer)
     {
-        $this->beneficiarioRepository = $beneficiarioRepository;
+        $this->beneficiarioService = $beneficiarioService;
         $this->serializer = $serializer;
     }
 
     /**
      * @Route("/beneficiarios", methods={"GET"})
      */
-    public function list(): Response
+    public function list(): JsonResponse
     {
-        $beneficiarios = $this->beneficiarioRepository->findAll();
 
-        $jsonBeneficiarios = $this->serializer->serialize($beneficiarios, 'json', [
-            AbstractNormalizer::GROUPS => ['beneficiario']
-        ]);
+        $beneficiarios = $this->beneficiarioService->getAllBeneficiarios();
 
-        return new Response($jsonBeneficiarios, 200, ['Content-Type' => 'application/json']);
+        // Serialize the list of Beneficiarios to JSON using the 'beneficiario' group
+        $jsonBeneficiarios = $this->beneficiarioService->formatBeneficiarios($beneficiarios);
+
+        return new JsonResponse($jsonBeneficiarios, Response::HTTP_OK, []);
     }
 
     /**
@@ -46,19 +48,23 @@ class BeneficiarioController
             return new Response('Invalid input', 400);
         }
 
-        $beneficiario = $this->beneficiarioRepository->create($data);
+        try {
+            $beneficiario = $this->beneficiarioService->createBeneficiario($data);
 
-        $jsonBeneficiario = $this->serializer->serialize($beneficiario, 'json', [
-            AbstractNormalizer::GROUPS => ['beneficiario']
-        ]);
+            $jsonBeneficiario = $this->serializer->serialize($beneficiario, 'json', [
+                AbstractNormalizer::GROUPS => ['beneficiario']
+            ]);
 
-        return new Response(json_encode($jsonBeneficiario), 201, ['Content-Type' => 'application/json']);
+            return new Response($jsonBeneficiario, 201, ['Content-Type' => 'application/json']);
+        } catch (\InvalidArgumentException $e) {
+            return new Response($e->getMessage(), 400);
+        }
     }
 
     /**
      * @Route("/beneficiarios/{id}", methods={"PUT"})
      */
-    public function update(Beneficiario $beneficiario, Request $request): Response
+    public function update(Request $request, Beneficiario $beneficiario): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -66,13 +72,17 @@ class BeneficiarioController
             return new Response('Invalid input', 400);
         }
 
-        $beneficiario = $this->beneficiarioRepository->update($beneficiario, $data);
+        try {
+            $beneficiario = $this->beneficiarioService->updateBeneficiario($beneficiario, $data);
 
-        $jsonBeneficiario = $this->serializer->serialize($beneficiario, 'json', [
-            AbstractNormalizer::GROUPS => ['beneficiario']
-        ]);
+            $jsonBeneficiario = $this->serializer->serialize($beneficiario, 'json', [
+                AbstractNormalizer::GROUPS => ['beneficiario']
+            ]);
 
-        return new Response(json_encode($jsonBeneficiario), 200, ['Content-Type' => 'application/json']);
+            return new Response($jsonBeneficiario, 200, ['Content-Type' => 'application/json']);
+        } catch (\InvalidArgumentException $e) {
+            return new Response($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -80,7 +90,7 @@ class BeneficiarioController
      */
     public function delete(Beneficiario $beneficiario): Response
     {
-        $this->beneficiarioRepository->delete($beneficiario);
+        $this->beneficiarioService->deleteBeneficiario($beneficiario);
         return new Response(null, 204);
     }
 }
