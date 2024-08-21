@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\phpunit.xml.dist" tests="1" assertions="4" errors="0" failures="1" skipped="0" time="0.094168">
-    <testsuite name="Project Test Suite" tests="1" assertions="4" errors="0" failures="1" skipped="0" time="0.094168">
-      <testsuite name="App\Tests\Integration\DatabaseConnectionTest" file="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\DatabaseConnectionTest.php" tests="1" assertions="4" errors="0" failures="1" skipped="0" time="0.094168">
-        <testcase name="testEntityManagerConnection" file="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\DatabaseConnectionTest.php" line="25" class="App\Tests\Integration\DatabaseConnectionTest" classname="App.Tests.Integration.DatabaseConnectionTest" assertions="4" time="0.094168">
-          <failure type="PHPUnit\Framework\AssertionFailedError">App\Tests\Integration\DatabaseConnectionTest::testEntityManagerConnection&#13;
-Failed to establish connection: Entity Manager connection should be established.
-Failed asserting that false is true.
+  <testsuite name="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\phpunit.xml.dist" tests="2" assertions="0" errors="2" failures="0" skipped="0" time="0.000000">
+    <testsuite name="Project Test Suite" tests="2" assertions="0" errors="2" failures="0" skipped="0" time="0.000000">
+      <testsuite name="App\Tests\ConsultaStatusTest" file="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\entityValidation\BusinessLogicValidating\ConsultaStatusTest.php" tests="2" assertions="0" errors="2" failures="0" skipped="0" time="0.000000">
+        <testcase name="testConsultaStatusCannotBeChangedAfterCompletion" file="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\entityValidation\BusinessLogicValidating\ConsultaStatusTest.php" line="23" class="App\Tests\ConsultaStatusTest" classname="App.Tests.ConsultaStatusTest" assertions="0" time="0.000000">
+          <error type="Doctrine\DBAL\Exception\ConnectionException">App\Tests\ConsultaStatusTest::testConsultaStatusCannotBeChangedAfterCompletion&#13;
+Doctrine\DBAL\Exception\ConnectionException: An exception occurred in the driver: SQLSTATE[HY000] [1049] Unknown database 'consulta_medica_test_test'
 &#13;
-C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\DatabaseConnectionTest.php:36
-C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\phpunit\phpunit\phpunit:104</failure>
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Driver\API\MySQL\ExceptionConverter.php:80
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:1366
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:1314
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:219
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:986
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\orm\src\EntityManager.php:169
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\entityValidation\BusinessLogicValidating\ConsultaStatusTest.php:20
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\phpunit\phpunit\phpunit:104</error>
+        </testcase>
+        <testcase name="testConsultaCannotBeDeletedAfterCompletion" file="C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\entityValidation\BusinessLogicValidating\ConsultaStatusTest.php" line="35" class="App\Tests\ConsultaStatusTest" classname="App.Tests.ConsultaStatusTest" assertions="0" time="0.000000">
+          <error type="Doctrine\DBAL\Exception\ConnectionException">App\Tests\ConsultaStatusTest::testConsultaCannotBeDeletedAfterCompletion&#13;
+Doctrine\DBAL\Exception\ConnectionException: An exception occurred in the driver: SQLSTATE[HY000] [1049] Unknown database 'consulta_medica_test_test'
+&#13;
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Driver\API\MySQL\ExceptionConverter.php:80
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:1366
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:1314
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:219
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\dbal\src\Connection.php:986
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\doctrine\orm\src\EntityManager.php:169
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\tests\entityValidation\BusinessLogicValidating\ConsultaStatusTest.php:20
+C:\Users\vinic\Documents\dev\php\teste-back-end-jr-php\vendor\phpunit\phpunit\phpunit:104</error>
         </testcase>
       </testsuite>
     </testsuite>

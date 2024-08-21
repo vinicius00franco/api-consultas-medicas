@@ -1,0 +1,12 @@
+doctrine:
+    dbal:
+        connections:
+            default:
+                driver: 'pdo_mysql'
+                user: '%env(DB_USER)%'
+                password: '%env(DB_PASSWORD)%'
+                host: '%env(DB_HOST)%'
+                port: '%env(DB_PORT)%'
+                dbname: '%env(DB_NAME)%'
+        types:
+            json: Doctrine\DBAL\Types\JsonType

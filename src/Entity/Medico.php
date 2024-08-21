@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\MedicoRepository;
+use App\Validator\Constraints\HospitalExists;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MedicoRepository::class)]
 class Medico
@@ -21,6 +23,39 @@ class Medico
 
     #[ORM\ManyToOne(targetEntity: Hospital::class, inversedBy: 'medicos')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\CustomAssert(class: HospitalExists::class)] //hospital exists?
+    // constrants
+    #[Assert\Valid]
+    #[HospitalExists]
     private $hospital;
+
+    public function getNome(): ?string
+    {
+        return $this->nome;
+    }
+
+    public function setNome(string $nome): self
+    {
+        $this->nome = $nome;
+
+        return $this;
+    }
+
+    public function getHospital(): ?Hospital
+    {
+        return $this->hospital;
+    }
+
+    public function setHospital(?Hospital $hospital): self
+    {
+        $this->hospital = $hospital;
+
+        return $this;
+    }
+
+    public function setEspecialidade(string $especialidade): self
+    {
+        $this->especialidade = $especialidade;
+
+        return $this;
+    }
 }

@@ -17,6 +17,7 @@ class ConsultaStatusTest extends KernelTestCase
 
         $this->entityManager = self::getContainer()->get('doctrine.orm.entity_manager');
         $this->validator = Validation::createValidator();
+        $this->entityManager->beginTransaction();
     }
 
     public function testConsultaStatusCannotBeChangedAfterCompletion()
@@ -43,5 +44,12 @@ class ConsultaStatusTest extends KernelTestCase
 
         $deletedConsulta = $this->entityManager->find(Consulta::class, $consulta->getId());
         $this->assertNull($deletedConsulta, "Consulta should be deleted if it is completed.");
+    }
+
+    protected function tearDown(): void
+    {
+        $this->entityManager->rollback(); // Rollback the transaction
+        $this->entityManager->close();
+        parent::tearDown();
     }
 }
