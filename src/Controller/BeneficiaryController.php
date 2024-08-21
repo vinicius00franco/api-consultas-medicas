@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Beneficiario;
 use App\Repository\BeneficiarioRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,16 +29,16 @@ class BeneficiaryController
         return new Response(json_encode($beneficiario), 201, ['Content-Type' => 'application/json']);
     }
 
-    public function update(int $id, Request $request): Response
+    public function update(Beneficiario $beneficiaryId, Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
-        $beneficiario = $this->beneficiarioRepository->update($id, $data);
+        $beneficiario = $this->beneficiarioRepository->update($beneficiaryId, $data);
         return new Response(json_encode($beneficiario), 200, ['Content-Type' => 'application/json']);
     }
 
-    public function delete(int $id): Response
+    public function delete(Beneficiario $beneficiaryId): Response
     {
-        $this->beneficiarioRepository->delete($id);
+        $this->beneficiarioRepository->delete($beneficiaryId);
         return new Response(null, 204);
     }
 }

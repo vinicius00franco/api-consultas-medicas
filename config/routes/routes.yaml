@@ -1,29 +1,83 @@
+# Rotas para Beneficiário
+beneficiario_create:
+    path: /beneficiarios
+    controller: App\Controller\BeneficiarioController::create
+    methods: [POST]
 
-consultas:
-    resource: 'consulta/routes.php'
+beneficiario_list:
+    path: /beneficiarios
+    controller: App\Controller\BeneficiarioController::list
+    methods: [GET]
 
+beneficiario_update:
+    path: /beneficiarios/{id}
+    controller: App\Controller\BeneficiarioController::update
+    methods: [PUT]
 
-# Definição de rotas individuais com prefixo aplicado
-list:
-  path: /
-  methods: GET
-  controller: App\Controller\ConsultaController::list
+beneficiario_delete:
+    path: /beneficiarios/{id}
+    controller: App\Controller\BeneficiarioController::delete
+    methods: [DELETE]
 
-create:
-  path: /
-  methods: POST
-  controller: App\Controller\ConsultaController::create
+# Rotas para Médico
+medico_create:
+    path: /medicos
+    controller: App\Controller\MedicoController::create
+    methods: [POST]
 
-update:
-  path: /{id}
-  methods: PUT
-  requirements:
-      id: \d+
-  controller: App\Controller\ConsultaController::update
+medico_list:
+    path: /medicos
+    controller: App\Controller\MedicoController::list
+    methods: [GET]
 
-delete:
-  path: /{id}
-  methods: DELETE
-  requirements:
-    id: \d+
-  controller: App\Controller\ConsultaController::delete
+medico_update:
+    path: /medicos/{id}
+    controller: App\Controller\MedicoController::update
+    methods: [PUT]
+
+medico_delete:
+    path: /medicos/{id}
+    controller: App\Controller\MedicoController::delete
+    methods: [DELETE]
+
+# Rotas para Hospital
+hospital_create:
+    path: /hospitais
+    controller: App\Controller\HospitalController::create
+    methods: [POST]
+
+hospital_list:
+    path: /hospitais
+    controller: App\Controller\HospitalController::list
+    methods: [GET]
+
+hospital_update:
+    path: /hospitais/{id}
+    controller: App\Controller\HospitalController::update
+    methods: [PUT]
+
+hospital_delete:
+    path: /hospitais/{id}
+    controller: App\Controller\HospitalController::delete
+    methods: [DELETE]
+
+# Rotas para Consulta
+consulta_create:
+    path: /consultas
+    controller: App\Controller\ConsultaController::create
+    methods: [POST]
+
+consulta_list:
+    path: /consultas
+    controller: App\Controller\ConsultaController::list
+    methods: [GET]
+
+consulta_update:
+    path: /consultas/{id}
+    controller: App\Controller\ConsultaController::update
+    methods: [PUT]
+
+consulta_delete:
+    path: /consultas/{id}
+    controller: App\Controller\ConsultaController::delete
+    methods: [DELETE]
