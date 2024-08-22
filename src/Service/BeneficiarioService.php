@@ -23,7 +23,10 @@ class BeneficiarioService
 
     public function getAllBeneficiarios(): array
     {
-        return $this->beneficiarioRepository->findAll();
+    
+        $beneficiarios = $this->beneficiarioRepository->findAll();
+
+        return $this->formatBeneficiarios($beneficiarios);
     }
 
     public function createBeneficiario(array $data): Beneficiario

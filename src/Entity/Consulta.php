@@ -102,4 +102,9 @@ class Consulta
     {
         return $this->status === 'concluída';
     }
+
+    public function getDataStatusFormatted(): ?string
+    {
+        return $this->data ? $this->data->format('d/m/Y') : null;
+    }
 }

@@ -29,10 +29,8 @@ class BeneficiarioController extends AbstractController
 
         $beneficiarios = $this->beneficiarioService->getAllBeneficiarios();
 
-        // Serialize the list of Beneficiarios to JSON using the 'beneficiario' group
-        $jsonBeneficiarios = $this->beneficiarioService->formatBeneficiarios($beneficiarios);
 
-        return new JsonResponse($jsonBeneficiarios, Response::HTTP_OK, []);
+        return new JsonResponse($beneficiarios, Response::HTTP_OK, []);
     }
 
     /**

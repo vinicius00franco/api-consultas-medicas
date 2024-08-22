@@ -80,10 +80,7 @@ class Beneficiario
         }
     }
 
-    /**
-     * 
-     * @Groups({"beneficiario_read"})
-     */
+
     public function getDataNascimentoFormatted(): ?string
     {
         return $this->dataNascimento ? $this->dataNascimento->format('d/m/Y') : null;

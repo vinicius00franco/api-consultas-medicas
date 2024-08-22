@@ -38,8 +38,9 @@ class ConsultaService
     public function getAllConsultas(): array
     {
         $consultas = $this->consultaRepository->findAll();
+
         return $this->normalizer->normalize(
-            $consultas,
+            $this->formatDataConsulta($consultas),
             null,
             [
                 'groups' => ['consulta', 'beneficiario', 'medico'],
@@ -165,5 +166,32 @@ class ConsultaService
 
         // Agora você pode acessar a especialidade com segurança
         return $medico->getEspecialidade();
+    }
+
+    public function formatDataConsulta(array $consultas): array
+    {
+        return array_map(function (Consulta $consulta) {
+            return [
+                'id' => $consulta->getId(),
+                'data' => $consulta->getDataStatusFormatted(), // Formatando a data da consulta
+                'status' => $consulta->getStatus(),
+                'beneficiario' => [
+                    'id' => $consulta->getBeneficiario()->getId(),
+                    'nome' => $consulta->getBeneficiario()->getNome(),
+                    'email' => $consulta->getBeneficiario()->getEmail(),
+                    'dataNascimento' => $consulta->getBeneficiario()->getDataNascimentoFormatted(),
+                ],
+                'medico' => [
+                    'id' => $consulta->getMedico()->getId(),
+                    'nome' => $consulta->getMedico()->getNome(),
+                    'especialidade' => $consulta->getMedico()->getEspecialidade(),
+                ],
+                'hospital' => [
+                    'id' => $consulta->getHospital()->getId(),
+                    'nome' => $consulta->getHospital()->getNome(),
+                    'endereco' => $consulta->getHospital()->getEndereco(),
+                ],
+            ];
+        }, $consultas);
     }
 }
