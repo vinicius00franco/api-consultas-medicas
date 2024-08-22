@@ -32,8 +32,13 @@ class MedicoController
     public function create(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
-        $medico = $this->medicoService->createMedico($data);
-        return new Response(json_encode($medico), 201, ['Content-Type' => 'application/json']);
+
+        try {
+            $medico = $this->medicoService->createMedico($data);
+            return new Response(json_encode($medico), 201, ['Content-Type' => 'application/json']);
+        } catch (\Exception $e) {
+            return new Response($e->getMessage(), 400);
+        }
     }
 
     /**

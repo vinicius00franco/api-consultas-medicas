@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Validator\Constraints;
+namespace App\Service\Validation\Constraints;
 
 use Symfony\Component\Validator\Constraint;
+use App\Service\Validation\AgeValidator;
 
 #[\Attribute]
 class Age extends Constraint
@@ -17,6 +18,6 @@ class Age extends Constraint
 
     public function validatedBy(): string
     {
-        return \App\Validator\AgeValidator::class;
+        return AgeValidator::class;
     }
 }

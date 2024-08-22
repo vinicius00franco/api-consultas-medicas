@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MedicoRepository;
-use App\Validator\Constraints\HospitalExists;
+use App\Service\Validation\Constraints\HospitalExists;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Attribute\Groups;

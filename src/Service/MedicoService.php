@@ -3,6 +3,7 @@ namespace App\Service;
 
 use App\Repository\MedicoRepository;
 use App\Entity\Medico;
+use App\Service\Validation\MedicoDataValidator;
 use Doctrine\ORM\EntityNotFoundException;
 
 use Symfony\Component\Serializer\SerializerInterface;
@@ -13,12 +14,16 @@ class MedicoService
     private $medicoRepository;
     private $serializer;
     private $normalizer;
+    
+    private $medicoValidator;
 
-    public function __construct(MedicoRepository $medicoRepository, SerializerInterface $serializer, NormalizerInterface $normalizer)
+    public function __construct(MedicoRepository $medicoRepository, SerializerInterface $serializer, NormalizerInterface $normalizer,MedicoDataValidator $medicoValidator)
     {
         $this->medicoRepository = $medicoRepository;
         $this->serializer = $serializer;
         $this->normalizer = $normalizer;
+        
+        $this->medicoValidator = $medicoValidator;
     }
 
     public function getAllMedicos(): array
@@ -33,7 +38,19 @@ class MedicoService
 
     public function createMedico(array $data): Medico
     {
-        return $this->medicoRepository->create($data);
+
+        $this->medicoValidator->validateMedicoData($data);
+
+        $medico = new Medico();
+        $medico->setNome($data['nome']);
+        $medico->setEspecialidade($data['especialidade']);
+
+        $hospital = $this->medicoValidator->getHospitalFromData($data);
+        $medico->setHospital($hospital);
+
+        $this->medicoRepository->save($medico);
+
+        return $medico;
     }
 
     public function updateMedico(Medico $medicoId, array $data): Medico

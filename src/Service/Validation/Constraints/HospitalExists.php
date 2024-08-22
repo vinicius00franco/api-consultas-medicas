@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Validator\Constraints;
+namespace App\Service\Validation\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use App\Repository\HospitalRepository;
+use App\Service\Validation\HospitalExistsValidator;
 
 
 #[\Attribute]
@@ -20,6 +21,6 @@ class HospitalExists extends Constraint
 
     public function validatedBy(): string
     {
-        return \App\Validator\HospitalExistsValidator::class;
+        return HospitalExistsValidator::class;
     }
 }

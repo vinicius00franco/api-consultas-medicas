@@ -20,8 +20,8 @@ class MedicoRepository extends ServiceEntityRepository
 
     public function save(Medico $medico): void
     {
-        $this->_em->persist($medico);
-        $this->_em->flush();
+        $this->entityManager->persist($medico);
+        $this->entityManager->flush();
     }
 
     public function delete(Medico $medico): void
@@ -38,17 +38,6 @@ class MedicoRepository extends ServiceEntityRepository
     public function findById(Medico $medicoId): ?Medico
     {
         return $this->find($medicoId);
-    }
-
-    public function create(array $data): Medico
-    {
-        $medico = new Medico();
-        $medico->setNome($data['nome']);
-        $medico->setEspecialidade($data['especialidade']);
-        $medico->setHospital($data['hospital']);
-        $this->save($medico);
-
-        return $medico;
     }
 
     public function update(Medico $medicoId, array $data): Medico
