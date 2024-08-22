@@ -20,15 +20,15 @@ class Consulta
     private $status;
 
     #[ORM\ManyToOne(targetEntity: Beneficiario::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private $beneficiario;
 
     #[ORM\ManyToOne(targetEntity: Medico::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false,onDelete: "CASCADE")]
     private $medico;
 
     #[ORM\ManyToOne(targetEntity: Hospital::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false,onDelete: "CASCADE")]
     private $hospital;
 
     public function getId(): ?int

@@ -27,7 +27,7 @@ class Medico
     private $especialidade;
 
     #[ORM\ManyToOne(targetEntity: Hospital::class, inversedBy: 'medicos')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false,onDelete: "CASCADE")]
     // constrants
     #[Assert\Valid]
     #[HospitalExists]
@@ -35,6 +35,9 @@ class Medico
     #[MaxDepth(1)]
     #[Groups(['medico'])]
     private $hospital;
+
+    #[ORM\Column(type: 'boolean')]
+    private $ativo = true;
 
     public function getId(): ?int
     {
@@ -70,5 +73,16 @@ class Medico
         $this->especialidade = $especialidade;
 
         return $this;
+    }
+
+    public function setAtivo(bool $ativo): self
+    {
+        $this->ativo = $ativo;
+        return $this;
+    }
+
+    public function isAtivo(): bool
+    {
+        return $this->ativo;
     }
 }

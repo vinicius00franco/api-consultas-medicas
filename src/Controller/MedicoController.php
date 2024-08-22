@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Entity\Medico;
 use App\Service\MedicoService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,12 +19,12 @@ class MedicoController
     /**
      * @Route("/medicos", name="medico_list", methods={"GET"})
      */
-    public function list(): Response
+    public function list(): JsonResponse
     {
         $medicos = $this->medicoService->getAllMedicos();
 
-        var_dump($medicos);
-        return new Response(json_encode($medicos), 200, ['Content-Type' => 'application/json']);
+        //dd($medicos);
+        return new JsonResponse($medicos, 200);
     }
 
     /**
@@ -51,6 +52,8 @@ class MedicoController
         if (!$medico) {
             return new Response('Not Found', 404);
         }
+
+        
         return new Response(json_encode($medico), 200, ['Content-Type' => 'application/json']);
     }
 

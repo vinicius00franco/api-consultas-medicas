@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BeneficiarioRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Validator\Constraints\Age;
+use App\Service\Validation\Constraints\Age;
 use Symfony\Component\Serializer\Annotation\Groups;
 use DateTimeInterface;
 use Symfony\Component\Validator\Constraints as Assert;

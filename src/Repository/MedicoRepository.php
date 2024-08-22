@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Hospital;
 use App\Entity\Medico;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
@@ -40,7 +41,7 @@ class MedicoRepository extends ServiceEntityRepository
         return $this->find($medicoId);
     }
 
-    public function update(Medico $medicoId, array $data): Medico
+    public function update(Medico $medicoId, array $data, Hospital $hospital): Medico
     {
         $medico = $this->find($medicoId);
 
@@ -50,9 +51,16 @@ class MedicoRepository extends ServiceEntityRepository
 
         $medico->setNome($data['nome']);
         $medico->setEspecialidade($data['especialidade']);
-        $medico->setHospital($data['hospital']);
+        $medico->setHospital($hospital);
+
         $this->save($medico);
 
         return $medico;
+    }
+
+    public function deactivateMedico(Medico $medico): void
+    {
+        $medico->setAtivo(false);
+        $this->medicoRepository->save($medico);
     }
 }
