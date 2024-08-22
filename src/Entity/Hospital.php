@@ -7,7 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-
+use Symfony\Component\Serializer\Attribute\Ignore;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 
 #[ORM\Entity(repositoryClass: HospitalRepository::class)]
 class Hospital
@@ -15,11 +16,11 @@ class Hospital
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['hospital'])]
+    #[Groups(['medico','hospital'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['hospital'])]
+    #[Groups(['medico','hospital'])]
     private $nome;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -27,7 +28,8 @@ class Hospital
     private $endereco;
 
     #[ORM\OneToMany(targetEntity: Medico::class, mappedBy: 'hospital')]
-    #[Groups(['hospital'])]
+    #[MaxDepth(1)]
+    #[Groups(['hospital','medicos'])]
     private $medicos;
 
     public function __construct()

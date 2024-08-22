@@ -6,7 +6,8 @@ use App\Repository\MedicoRepository;
 use App\Validator\Constraints\HospitalExists;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 
 #[ORM\Entity(repositoryClass: MedicoRepository::class)]
 class Medico
@@ -30,6 +31,8 @@ class Medico
     // constrants
     #[Assert\Valid]
     #[HospitalExists]
+    // serializer
+    #[MaxDepth(1)]
     #[Groups(['medico'])]
     private $hospital;
 

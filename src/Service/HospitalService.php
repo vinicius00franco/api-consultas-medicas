@@ -23,8 +23,13 @@ class HospitalService
 
     public function getAllHospitals(): array
     {
-        $hospitals = $this->hospitalRepository->findAll();
-        return $this->normalizer->normalize($hospitals, null, ['groups' => 'hospital']);
+        $hospital = $this->hospitalRepository->findAll();
+        return $this->normalizer->normalize($hospital, null, ['groups' => ['medico', 'hospital'],
+        'circular_reference_handler' => function ($object) {
+            return $object->getId();
+        },
+    
+    ]);
     }
 
     public function createHospital(array $data): Hospital
@@ -76,10 +81,5 @@ class HospitalService
         }
 
         return $hospital;
-    }
-
-    public function normalize($hospitals)
-    {
-        return $this->normalizer->normalize($hospitals, null, ['groups' => 'hospital']);
     }
 }

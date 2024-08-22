@@ -24,7 +24,11 @@ class MedicoService
     public function getAllMedicos(): array
     {
         $medicos = $this->medicoRepository->findAll();
-        return $this->normalizer->normalize($medicos, null, ['groups' => 'medico']);
+        return $this->normalizer->normalize($medicos, null, ['groups' => ['medico', 'hospital'],
+        'circular_reference_handler' => function ($object) {
+            return $object->getId(); // Retorna o ID do objeto para evitar referência circular
+        },
+    ]);
     }
 
     public function createMedico(array $data): Medico
