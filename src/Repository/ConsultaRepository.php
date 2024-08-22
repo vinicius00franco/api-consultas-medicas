@@ -6,8 +6,9 @@ use App\Entity\Consulta;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use App\Repository\Pattern\ConsultaRepositoryInterface;
 
-class ConsultaRepository extends ServiceEntityRepository 
+class ConsultaRepository extends ServiceEntityRepository implements ConsultaRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -19,12 +20,12 @@ class ConsultaRepository extends ServiceEntityRepository
         return parent::findAll();
     }
 
-    public function find($id, $lockMode = null, $lockVersion = null): ?Consulta
+    public function findById(Consulta $consulta): ?Consulta
     {
-        return parent::find($id, $lockMode, $lockVersion);
+        return parent::find($consulta,$lockMode = null, $lockVersion = null);
     }
 
-    public function create(array $data): Consulta
+    public function createConsulta(array $data): Consulta
     {
         $consulta = new Consulta();
         $consulta->setDataNascimento(new \DateTime($data['data']));

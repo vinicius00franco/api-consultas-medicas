@@ -90,4 +90,9 @@ class Consulta
         $this->hospital = $hospital;
         return $this;
     }
+
+    public function isConcluida(): bool
+    {
+        return $this->status === 'concluída';
+    }
 }

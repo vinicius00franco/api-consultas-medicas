@@ -6,6 +6,7 @@ use App\Entity\Beneficiario;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\Pattern\BeneficiarioRepositoryInterface;
 
 class BeneficiarioRepository extends ServiceEntityRepository implements BeneficiarioRepositoryInterface
 {

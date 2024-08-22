@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Beneficiario;
-use App\Repository\BeneficiarioRepositoryInterface;
+use App\Repository\Pattern\BeneficiarioRepositoryInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Serializer\SerializerInterface;

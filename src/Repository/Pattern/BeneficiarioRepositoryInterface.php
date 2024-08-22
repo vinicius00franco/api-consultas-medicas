@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Pattern;
 
 use App\Entity\Beneficiario;
 
