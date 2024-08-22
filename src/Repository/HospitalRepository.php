@@ -14,12 +14,17 @@ use Doctrine\ORM\EntityNotFoundException;
  */
 class HospitalRepository extends ServiceEntityRepository
 {
-    private $em;
+    private $entityManager;
 
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Hospital::class);
-        $this->em = $em;
+        $this->entityManager = $entityManager;
+    }
+
+    public function findAll(): array
+    {
+        return $this->findBy([]);
     }
 
     public function create(array $data): Hospital
@@ -28,8 +33,8 @@ class HospitalRepository extends ServiceEntityRepository
         $hospital->setNome($data['name']); // ajuste os setters conforme necessário
         // Defina outros campos conforme necessário
 
-        $this->em->persist($hospital);
-        $this->em->flush();
+        $this->entityManager->persist($hospital);
+        $this->entityManager->flush();
 
         return $hospital;
     }
@@ -45,7 +50,7 @@ class HospitalRepository extends ServiceEntityRepository
         $hospital->setName($data['name']); // ajuste os setters conforme necessário
         // Atualize outros campos conforme necessário
 
-        $this->em->flush();
+        $this->entityManager->flush();
 
         return $hospital;
     }
@@ -53,8 +58,8 @@ class HospitalRepository extends ServiceEntityRepository
 
     public function save(Hospital $hospital): void
     {
-        $this->em->persist($hospital);
-        $this->em->flush();
+        $this->entityManager->persist($hospital);
+        $this->entityManager->flush();
     }
 
     public function delete(Hospital $hospitalId): void
@@ -64,7 +69,7 @@ class HospitalRepository extends ServiceEntityRepository
         if (!$hospitalId) {
             throw new EntityNotFoundException('Hospital not found.');
         }
-        $this->em->remove($hospitalId);
-        $this->em->flush();
+        $this->entityManager->remove($hospitalId);
+        $this->entityManager->flush();
     }
 }

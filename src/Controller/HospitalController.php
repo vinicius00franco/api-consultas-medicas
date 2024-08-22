@@ -31,7 +31,7 @@ class HospitalController extends AbstractController
     }
 
     /**
-     * @Route("/hospitals", name="hospital_create", methods={"POST"})
+     * @Route("/hospitals/create", name="hospital_create", methods={"POST"})
      */
     public function create(Request $request): Response
     {
@@ -60,7 +60,7 @@ class HospitalController extends AbstractController
     public function delete(Hospital $hospitalId): Response
     {
         $this->hospitalService->deleteHospital($hospitalId);
-        
+
         return new Response(null, 204);
     }
 }

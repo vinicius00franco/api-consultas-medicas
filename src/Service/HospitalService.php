@@ -5,14 +5,26 @@ namespace App\Service;
 use App\Entity\Hospital;
 use App\Repository\HospitalRepository;
 use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class HospitalService
 {
     private $hospitalRepository;
+    private $serializer;
+    private $normalizer;
 
-    public function __construct(HospitalRepository $hospitalRepository)
+    public function __construct(HospitalRepository $hospitalRepository, SerializerInterface $serializer,NormalizerInterface $normalizer)
     {
         $this->hospitalRepository = $hospitalRepository;
+        $this->serializer = $serializer;
+        $this->normalizer = $normalizer;
+    }
+
+    public function getAllHospitals(): array
+    {
+        $hospitals = $this->hospitalRepository->findAll();
+        return $this->normalizer->normalize($hospitals, null, ['groups' => 'hospital']);
     }
 
     public function createHospital(array $data): Hospital
@@ -66,8 +78,8 @@ class HospitalService
         return $hospital;
     }
 
-    public function getAllHospitals(): array
+    public function normalize($hospitals)
     {
-        return $this->hospitalRepository->findAll();
+        return $this->normalizer->normalize($hospitals, null, ['groups' => 'hospital']);
     }
 }

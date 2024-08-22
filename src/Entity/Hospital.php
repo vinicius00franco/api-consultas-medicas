@@ -6,6 +6,8 @@ use App\Repository\HospitalRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: HospitalRepository::class)]
 class Hospital
@@ -13,15 +15,19 @@ class Hospital
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['hospital'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['hospital'])]
     private $nome;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['hospital'])]
     private $endereco;
 
     #[ORM\OneToMany(targetEntity: Medico::class, mappedBy: 'hospital')]
+    #[Groups(['hospital'])]
     private $medicos;
 
     public function __construct()
@@ -29,10 +35,16 @@ class Hospital
         $this->medicos = new ArrayCollection();
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function getNome(): ?string
     {
         return $this->nome;
     }
+    
 
     public function setNome(string $nome): self
     {
