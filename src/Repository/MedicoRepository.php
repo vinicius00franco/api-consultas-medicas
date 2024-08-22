@@ -1,15 +1,21 @@
 <?php
+
 namespace App\Repository;
 
 use App\Entity\Medico;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 class MedicoRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $entityManager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Medico::class);
+        $this->entityManager = $entityManager;
     }
 
     public function save(Medico $medico): void
@@ -18,9 +24,46 @@ class MedicoRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
-    public function remove(Medico $medico): void
+    public function delete(Medico $medico): void
     {
-        $this->_em->remove($medico);
-        $this->_em->flush();
+        $this->entityManager->remove($medico);
+        $this->entityManager->flush();
+    }
+
+    public function findAll(): array
+    {
+        return $this->findBy([]);
+    }
+
+    public function findById(Medico $medicoId): ?Medico
+    {
+        return $this->find($medicoId);
+    }
+
+    public function create(array $data): Medico
+    {
+        $medico = new Medico();
+        $medico->setNome($data['nome']);
+        $medico->setEspecialidade($data['especialidade']);
+        $medico->setHospital($data['hospital']);
+        $this->save($medico);
+
+        return $medico;
+    }
+
+    public function update(Medico $medicoId, array $data): Medico
+    {
+        $medico = $this->find($medicoId);
+
+        if (!$medico) {
+            throw new EntityNotFoundException('Medico not found.');
+        }
+
+        $medico->setNome($data['nome']);
+        $medico->setEspecialidade($data['especialidade']);
+        $medico->setHospital($data['hospital']);
+        $this->save($medico);
+
+        return $medico;
     }
 }

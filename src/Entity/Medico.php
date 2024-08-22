@@ -6,6 +6,7 @@ use App\Repository\MedicoRepository;
 use App\Validator\Constraints\HospitalExists;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MedicoRepository::class)]
 class Medico
@@ -13,12 +14,15 @@ class Medico
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['medico'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['medico'])]
     private $nome;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['medico'])]
     private $especialidade;
 
     #[ORM\ManyToOne(targetEntity: Hospital::class, inversedBy: 'medicos')]
@@ -26,7 +30,13 @@ class Medico
     // constrants
     #[Assert\Valid]
     #[HospitalExists]
+    #[Groups(['medico'])]
     private $hospital;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getNome(): ?string
     {

@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Medico;
 use App\Service\MedicoService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,32 +15,46 @@ class MedicoController
         $this->medicoService = $medicoService;
     }
 
+    /**
+     * @Route("/medicos", name="medico_list", methods={"GET"})
+     */
     public function list(): Response
     {
-        $medicos = $this->medicoService->findAll();
+        $medicos = $this->medicoService->getAllMedicos();
+
+        var_dump($medicos);
         return new Response(json_encode($medicos), 200, ['Content-Type' => 'application/json']);
     }
 
+    /**
+     * @Route("/medicos/create", name="medico_create", methods={"POST"})
+     */
     public function create(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
-        $medico = $this->medicoService->create($data);
+        $medico = $this->medicoService->createMedico($data);
         return new Response(json_encode($medico), 201, ['Content-Type' => 'application/json']);
     }
 
-    public function update(int $id, Request $request): Response
+    /**
+     * @Route("/medicos/{medicoId}", name="medico_update", methods={"PUT"})
+     */
+    public function update(Medico $medicoId, Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
-        $medico = $this->medicoService->update($id, $data);
+        $medico = $this->medicoService->updateMedico($medicoId, $data);
         if (!$medico) {
             return new Response('Not Found', 404);
         }
         return new Response(json_encode($medico), 200, ['Content-Type' => 'application/json']);
     }
 
-    public function delete(int $id): Response
+    /**
+     * @Route("/medicos/delete/{id}", name="medico_delete", methods={"DELETE"})
+     */
+    public function delete(Medico $medicoId): Response
     {
-        $this->medicoService->delete($id);
+        $this->medicoService->deleteMedico($medicoId);
         return new Response(null, 204);
     }
 }

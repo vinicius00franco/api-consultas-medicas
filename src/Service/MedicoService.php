@@ -3,50 +3,59 @@ namespace App\Service;
 
 use App\Repository\MedicoRepository;
 use App\Entity\Medico;
+use Doctrine\ORM\EntityNotFoundException;
+
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class MedicoService
 {
     private $medicoRepository;
+    private $serializer;
+    private $normalizer;
 
-    public function __construct(MedicoRepository $medicoRepository)
+    public function __construct(MedicoRepository $medicoRepository, SerializerInterface $serializer, NormalizerInterface $normalizer)
     {
         $this->medicoRepository = $medicoRepository;
+        $this->serializer = $serializer;
+        $this->normalizer = $normalizer;
     }
 
-    public function findAll(): array
+    public function getAllMedicos(): array
     {
-        return $this->medicoRepository->findAll();
+        $medicos = $this->medicoRepository->findAll();
+        return $this->normalizer->normalize($medicos, null, ['groups' => 'medico']);
     }
 
-    public function create(array $data): Medico
+    public function createMedico(array $data): Medico
     {
-        // Assuming that $data contains the necessary fields to create a Medico entity.
-        $medico = new Medico();
-        // Set properties of $medico from $data
-        // For example: $medico->setName($data['name']);
-        
-        $this->medicoRepository->save($medico); // Custom method to save the entity
-        return $medico;
+        return $this->medicoRepository->create($data);
     }
 
-    public function update(int $id, array $data): ?Medico
+    public function updateMedico(Medico $medicoId, array $data): Medico
     {
-        $medico = $this->medicoRepository->find($id);
+        return $this->medicoRepository->update($medicoId, $data);
+    }
+
+    public function deleteMedico(Medico $medicoId): void
+    {
+        $medico = $this->medicoRepository->findById($medicoId);
+
         if (!$medico) {
-            return null;
+            throw new EntityNotFoundException('Medico not found.');
         }
-        // Update properties of $medico from $data
-        // For example: $medico->setName($data['name']);
-        
-        $this->medicoRepository->save($medico); // Custom method to save the updated entity
-        return $medico;
+
+        $this->medicoRepository->delete($medico);
     }
 
-    public function delete(int $id): void
+    public function getMedicoById(Medico $medicoId): Medico
     {
-        $medico = $this->medicoRepository->find($id);
-        if ($medico) {
-            $this->medicoRepository->remove($medico); // Custom method to remove the entity
+        $medico = $this->medicoRepository->findById($medicoId);
+
+        if (!$medico) {
+            throw new EntityNotFoundException('Medico not found.');
         }
+
+        return $medico;
     }
 }
