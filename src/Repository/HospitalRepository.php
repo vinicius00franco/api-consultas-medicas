@@ -50,15 +50,21 @@ class HospitalRepository extends ServiceEntityRepository
         return $hospital;
     }
 
-    public function delete(int $id): void
-    {
-        $hospital = $this->find($id);
 
-        if (!$hospital) {
+    public function save(Hospital $hospital): void
+    {
+        $this->em->persist($hospital);
+        $this->em->flush();
+    }
+
+    public function delete(Hospital $hospitalId): void
+    {
+        $hospital = $this->find($hospitalId);
+
+        if (!$hospitalId) {
             throw new EntityNotFoundException('Hospital not found.');
         }
-
-        $this->em->remove($hospital);
+        $this->em->remove($hospitalId);
         $this->em->flush();
     }
 }
