@@ -45,10 +45,11 @@ class MedicoService
             $medicos,
             null,
             [
-                'groups' => ['medico', 'hospital'],
+                'groups' => ['medico', 'hospital','consulta'],
                 'circular_reference_handler' => function ($object) {
                     return $object->getId(); // Retorna o ID do objeto para evitar referência circular
                 },
+                'skip_uninitialized_values' => true
             ]
         );
     }

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ConsultaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ConsultaRepository::class)]
 class Consulta
@@ -11,24 +12,30 @@ class Consulta
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['consulta'])]
     private $id;
 
     #[ORM\Column(type: 'datetime')]
+    #[Groups(['consulta'])]
     private $data;
 
     #[ORM\Column(type: 'string', length: 50)]
+    #[Groups(['consulta'])]
     private $status;
 
     #[ORM\ManyToOne(targetEntity: Beneficiario::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[Groups(['consulta','beneficiario','medico'])]
     private $beneficiario;
 
     #[ORM\ManyToOne(targetEntity: Medico::class)]
-    #[ORM\JoinColumn(nullable: false,onDelete: "CASCADE")]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[Groups(['consulta','beneficiario','medico'])]
     private $medico;
 
     #[ORM\ManyToOne(targetEntity: Hospital::class)]
-    #[ORM\JoinColumn(nullable: false,onDelete: "CASCADE")]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[Groups(['consulta','beneficiario','medico'])]
     private $hospital;
 
     public function getId(): ?int

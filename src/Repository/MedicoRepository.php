@@ -8,6 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\Proxy;
 
 class MedicoRepository extends ServiceEntityRepository
 {
@@ -38,7 +39,12 @@ class MedicoRepository extends ServiceEntityRepository
 
     public function findById(Medico $medicoId): ?Medico
     {
-        return $this->find($medicoId);
+        $medico = $this->medicoRepository->find($medicoId);
+        if ($medico instanceof Proxy) {
+            $medico->__load();
+        }
+
+        return $medico;
     }
 
     public function update(Medico $medicoId, array $data, Hospital $hospital): Medico
