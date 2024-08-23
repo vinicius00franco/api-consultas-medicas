@@ -4,8 +4,8 @@ namespace App\Service;
 
 use App\Entity\Beneficiario;
 use App\Repository\Pattern\BeneficiarioRepositoryInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class BeneficiarioService
@@ -23,9 +23,7 @@ class BeneficiarioService
 
     public function getAllBeneficiarios(): array
     {
-    
         $beneficiarios = $this->beneficiarioRepository->findAll();
-
         return $this->formatBeneficiarios($beneficiarios);
     }
 
@@ -34,16 +32,8 @@ class BeneficiarioService
         $beneficiario = new Beneficiario();
         $beneficiario->setFromData($data);
 
-        // Validate the Beneficiario entity
-        $errors = $this->validator->validate($beneficiario);
-        if (count($errors) > 0) {
-            $errorMessages = [];
-            /** @var \Symfony\Component\Validator\ConstraintViolation $error */
-            foreach ($errors as $error) {
-                $errorMessages[] = $error->getMessage();
-            }
-            throw new \InvalidArgumentException(implode(', ', $errorMessages));
-        }
+        $this->validateBeneficiario($beneficiario);
+        $this->serializeBeneficiario($beneficiario);
 
         return $this->beneficiarioRepository->create($beneficiario);
     }
@@ -52,16 +42,8 @@ class BeneficiarioService
     {
         $beneficiario->setFromData($data);
 
-        // Validate the updated Beneficiario entity
-        $errors = $this->validator->validate($beneficiario);
-        if (count($errors) > 0) {
-            $errorMessages = [];
-            /** @var \Symfony\Component\Validator\ConstraintViolation $error */
-            foreach ($errors as $error) {
-                $errorMessages[] = $error->getMessage();
-            }
-            throw new \InvalidArgumentException(implode(', ', $errorMessages));
-        }
+        $this->validateBeneficiario($beneficiario);
+        $this->serializeBeneficiario($beneficiario);
 
         return $this->beneficiarioRepository->update($beneficiario, $data);
     }
@@ -69,6 +51,25 @@ class BeneficiarioService
     public function deleteBeneficiario(Beneficiario $beneficiario): void
     {
         $this->beneficiarioRepository->delete($beneficiario);
+    }
+
+    private function validateBeneficiario(Beneficiario $beneficiario): void
+    {
+        $errors = $this->validator->validate($beneficiario);
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[] = $error->getMessage();
+            }
+            throw new \InvalidArgumentException(implode(', ', $errorMessages));
+        }
+    }
+
+    private function serializeBeneficiario(Beneficiario $beneficiario): void
+    {
+        $this->serializer->serialize($beneficiario, 'json', [
+            AbstractNormalizer::GROUPS => ['beneficiario']
+        ]);
     }
 
     public function formatBeneficiarios(array $beneficiarios): array
@@ -82,5 +83,4 @@ class BeneficiarioService
             ];
         }, $beneficiarios);
     }
-
 }

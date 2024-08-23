@@ -9,12 +9,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class BeneficiarioController extends AbstractController
 {
     private $beneficiarioService;
-    private $serializer;
 
     public function __construct(BeneficiarioService $beneficiarioService)
     {
@@ -26,67 +24,59 @@ class BeneficiarioController extends AbstractController
      */
     public function list(): JsonResponse
     {
-
         $beneficiarios = $this->beneficiarioService->getAllBeneficiarios();
 
-
-        return new JsonResponse($beneficiarios, Response::HTTP_OK, []);
+        return new JsonResponse($beneficiarios, Response::HTTP_OK);
     }
 
     /**
      * @Route("/beneficiarios/create", methods={"POST"})
      */
-    public function create(Request $request): Response
+    public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
         if (!is_array($data)) {
-            return new Response('Invalid input', 400);
+            return new JsonResponse(['error' => 'Invalid input'], Response::HTTP_BAD_REQUEST);
         }
 
         try {
             $beneficiario = $this->beneficiarioService->createBeneficiario($data);
 
-            $jsonBeneficiario = $this->serializer->serialize($beneficiario, 'json', [
-                AbstractNormalizer::GROUPS => ['beneficiario']
-            ]);
-
-            return new Response($jsonBeneficiario, 201, ['Content-Type' => 'application/json']);
+            return new JsonResponse($beneficiario, Response::HTTP_CREATED);
         } catch (\InvalidArgumentException $e) {
-            return new Response($e->getMessage(), 400);
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
      * @Route("/beneficiarios/{id}", methods={"PUT"})
      */
-    public function update(Request $request, Beneficiario $beneficiario): Response
+    public function update(Request $request, Beneficiario $beneficiario): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
         if (!is_array($data)) {
-            return new Response('Invalid input', 400);
+            return new JsonResponse(['error' => 'Invalid input'], Response::HTTP_BAD_REQUEST);
         }
 
         try {
             $beneficiario = $this->beneficiarioService->updateBeneficiario($beneficiario, $data);
 
-            $jsonBeneficiario = $this->serializer->serialize($beneficiario, 'json', [
-                AbstractNormalizer::GROUPS => ['beneficiario']
-            ]);
-
-            return new Response($jsonBeneficiario, 200, ['Content-Type' => 'application/json']);
+            return new JsonResponse($beneficiario, Response::HTTP_OK);
         } catch (\InvalidArgumentException $e) {
-            return new Response($e->getMessage(), 400);
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
     /**
      * @Route("/beneficiarios/delete/{id}", methods={"DELETE"})
      */
-    public function delete(Beneficiario $beneficiario): Response
+    public function delete(Beneficiario $beneficiario): JsonResponse
     {
         $this->beneficiarioService->deleteBeneficiario($beneficiario);
-        return new Response(null, 204);
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
