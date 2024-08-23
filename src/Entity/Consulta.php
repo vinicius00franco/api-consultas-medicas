@@ -17,7 +17,7 @@ class Consulta
 
     #[ORM\Column(type: 'datetime')]
     #[Groups(['consulta'])]
-    private $data;
+    private $dataStatus;
 
     #[ORM\Column(type: 'string', length: 50)]
     #[Groups(['consulta'])]
@@ -45,12 +45,12 @@ class Consulta
 
     public function getDataNascimento(): ?\DateTimeInterface
     {
-        return $this->data;
+        return $this->dataStatus;
     }
 
-    public function setDataNascimento(\DateTimeInterface $data): self
+    public function setDataStatus(\DateTimeInterface $dataStatus): self
     {
-        $this->data = $data;
+        $this->dataStatus = $dataStatus;
         return $this;
     }
 
@@ -105,6 +105,6 @@ class Consulta
 
     public function getDataStatusFormatted(): ?string
     {
-        return $this->data ? $this->data->format('d/m/Y') : null;
+        return $this->dataStatus ? $this->dataStatus->format('d/m/Y') : null;
     }
 }

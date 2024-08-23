@@ -36,8 +36,11 @@ class ConsultaController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
+        
+
         try {
             $consulta = $this->consultaService->createConsulta($data);
+
             return new Response(json_encode($consulta), Response::HTTP_CREATED, ['Content-Type' => 'application/json']);
         } catch (\Exception $e) {
             return new Response($e->getMessage(), Response::HTTP_BAD_REQUEST);

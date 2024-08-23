@@ -28,7 +28,7 @@ class ConsultaRepository extends ServiceEntityRepository implements ConsultaRepo
     public function createConsulta(array $data): Consulta
     {
         $consulta = new Consulta();
-        $consulta->setDataNascimento(new \DateTime($data['data']));
+        $consulta->setDataStatus(new \DateTime($data['dataStatus']));
         $consulta->setStatus($data['status']);
         $consulta->setBeneficiario($this->getReference('App:Beneficiario', $data['beneficiario']));
         $consulta->setMedico($this->getReference('App:Medico', $data['medico']));
@@ -46,7 +46,7 @@ class ConsultaRepository extends ServiceEntityRepository implements ConsultaRepo
             throw new AccessDeniedHttpException('Não é possível alterar uma consulta concluída.');
         }
 
-        $consulta->setDataNascimento(new \DateTime($data['data']));
+        $consulta->setDataStatus(new \DateTime($data['dataStatus']));
         $consulta->setStatus($data['status']);
         $consulta->setBeneficiario($this->getReference('App:Beneficiario', $data['beneficiario']));
         $consulta->setMedico($this->getReference('App:Medico', $data['medico']));

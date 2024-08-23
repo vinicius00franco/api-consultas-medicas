@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+use App\Entity\Beneficiario;
 use App\Entity\Consulta;
+use App\Entity\Hospital;
 use App\Entity\Medico;
 use App\Repository\Pattern\ConsultaRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -80,8 +82,8 @@ class ConsultaService
 
     public function createConsulta(array $data): array
     {
-        $consulta = new Consulta();
-        $this->populateConsultaData($consulta, $data);
+
+        $consulta = $this->populateConsultaData(new Consulta(), $data);
 
         $this->entityManager->persist($consulta);
         $this->entityManager->flush();
@@ -143,14 +145,16 @@ class ConsultaService
         $this->entityManager->flush();
     }
 
-    private function populateConsultaData(Consulta $consulta, array $data): void
+    private function populateConsultaData(Consulta $consulta, array $data): Consulta
     {
-        $consulta->setDataNascimento(new \DateTime($data['data']));
-        $consulta->setStatus($data['status']);
-        $consulta->setBeneficiario($this->entityManager->getReference('App:Beneficiario', $data['beneficiario']));
-        $consulta->setMedico($this->entityManager->getReference('App:Medico', $data['medico']));
-        $consulta->setHospital($this->entityManager->getReference('App:Hospital', $data['hospital']));
+        return $consulta->setDataStatus(new \DateTime($data['dataStatus']))
+            ->setStatus($data['status'])
+            ->setBeneficiario($this->entityManager->getReference(Beneficiario::class, $data['beneficiario']['id'])) // Referenciando corretamente a entidade Beneficiario
+            ->setMedico($this->entityManager->getReference(Medico::class, $data['medico']['id'])) // Referenciando corretamente a entidade Medico
+            ->setHospital($this->entityManager->getReference(Hospital::class, $data['hospital']['id'])); // Referenciando corretamente a entidade Hospital
     }
+    
+
     public function verificarEspecialidade(Medico $medico): string
     {
         // Verifica se a propriedade 'especialidade' está inicializada
@@ -173,7 +177,7 @@ class ConsultaService
         return array_map(function (Consulta $consulta) {
             return [
                 'id' => $consulta->getId(),
-                'data' => $consulta->getDataStatusFormatted(), // Formatando a data da consulta
+                'dataStatus' => $consulta->getDataStatusFormatted(), // Formatando a data da consulta
                 'status' => $consulta->getStatus(),
                 'beneficiario' => [
                     'id' => $consulta->getBeneficiario()->getId(),
