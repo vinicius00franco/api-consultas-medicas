@@ -83,8 +83,11 @@ class ConsultaService
     public function createConsulta(array $data): array
     {
 
-        $consulta = $this->populateConsultaData(new Consulta(), $data);
+        if ($data['status'] === 'concluída') {
+            throw new \InvalidArgumentException('Não é permitido criar uma consulta já concluída.');
+        }
 
+        $consulta = $this->populateConsultaData(new Consulta(), $data);  
         $this->entityManager->persist($consulta);
         $this->entityManager->flush();
 
@@ -104,8 +107,8 @@ class ConsultaService
     {
         $consulta = $this->consultaRepository->findById($consulta);
 
-        if (!$consulta) {
-            throw new NotFoundHttpException('Consulta não encontrada.');
+        if ($consulta->isConcluida()) {
+            throw new AccessDeniedHttpException('Não é possível alterar uma consulta concluída.');
         }
 
         $this->consultaValidator->validateUpdate($consulta);

@@ -45,7 +45,7 @@ class MedicoService
             $medicos,
             null,
             [
-                'groups' => ['medico', 'hospital','consulta'],
+                'groups' => ['medico', 'hospital', 'consulta'],
                 'circular_reference_handler' => function ($object) {
                     return $object->getId(); // Retorna o ID do objeto para evitar referência circular
                 },
@@ -56,6 +56,10 @@ class MedicoService
 
     public function createMedico(array $data): Medico
     {
+        $hospital = $this->hospitalRepository->find($data['hospital']['id']);
+        if (!$hospital) {
+            throw new \InvalidArgumentException('O hospital especificado não existe.');
+        }
 
         $this->medicoValidator->validateMedicoData($data);
 

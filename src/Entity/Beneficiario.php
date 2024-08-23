@@ -85,4 +85,15 @@ class Beneficiario
     {
         return $this->dataNascimento ? $this->dataNascimento->format('d/m/Y') : null;
     }
+
+    public function getIdade(): ?int
+    {
+        if ($this->dataNascimento) {
+            $hoje = new \DateTime('now');
+            $idade = $hoje->diff($this->dataNascimento)->y;
+            return $idade;
+        }
+
+        return null;
+    }
 }

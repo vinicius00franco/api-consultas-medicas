@@ -32,6 +32,11 @@ class BeneficiarioService
         $beneficiario = new Beneficiario();
         $beneficiario->setFromData($data);
 
+        $age = $beneficiario->getIdade(); // Supondo que getIdade calcula a idade com base em data de nascimento
+        if ($age < 18) {
+            throw new \InvalidArgumentException('O beneficiário deve ter pelo menos 18 anos.');
+        }
+
         $this->validateBeneficiario($beneficiario);
         $this->serializeBeneficiario($beneficiario);
 
